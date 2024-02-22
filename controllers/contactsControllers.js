@@ -62,15 +62,6 @@ export const updateContact = async (req, res, next) => {
     if (!contactToChange) {
       throw HttpError(404, "Not Found");
     }
-    if (Object.keys(req.body).length === 0) {
-      console.log("in IF");
-      throw HttpError(400, "Body must have at least one field");
-    }
-
-    const { error } = updateContactSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
 
     const updatedContact = await contactsService.updateContact(id, req.body);
     res.json(updatedContact);
