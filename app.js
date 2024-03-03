@@ -3,9 +3,10 @@ import morgan from "morgan";
 import cors from "cors";
 import mongoose from "mongoose";
 import contactsRouter from "./routes/contactsRouter.js";
+import dotenv from "dotenv";
 
-const DB_HOST =
-  "mongodb+srv://vladyslav:3188XtkxmT612yzJ@cluster0.dlu8isk.mongodb.net/db-contacts?retryWrites=true&w=majority&appName=Cluster0";
+dotenv.config();
+const { DB_HOST } = process.env;
 const app = express();
 
 app.use(morgan("tiny"));
