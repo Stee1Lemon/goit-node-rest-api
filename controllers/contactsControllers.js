@@ -1,6 +1,7 @@
 import HttpError from "../helpers/HttpError.js";
 import contactModel from "../models/contact.js";
 import ctrlWrapper from "../helpers/ctrlWrapper.js";
+import compareMongoIds from "../helpers/compareMongoIds.js";
 
 const { Contact } = contactModel;
 
@@ -24,19 +25,28 @@ const getAllContacts = async (req, res, next) => {
 
 const getOneContact = async (req, res, next) => {
   const { id } = req.params;
+  const { _id } = req.user;
   const result = await Contact.findById(id);
-  if (!result) {
+  const isValidOwner = compareMongoIds(_id, result.owner);
+
+  if (!result || !isValidOwner) {
     throw HttpError(404, "Not Found");
   }
+
   res.json(result);
 };
 
 const deleteContact = async (req, res, next) => {
   const { id } = req.params;
-  const result = await Contact.findByIdAndDelete(id);
-  if (!result) {
+  const { _id } = req.user;
+  const contact = await Contact.findById(id);
+  const isValidOwner = compareMongoIds(_id, contact.owner);
+
+  if (!contact || !isValidOwner) {
     throw HttpError(404, "Not Found");
   }
+  const result = await Contact.findByIdAndDelete(id);
+
   res.json(result);
 };
 
@@ -48,19 +58,31 @@ const createContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
-  if (!result) {
+  const { _id } = req.user;
+  const contact = await Contact.findById(id);
+  const isValidOwner = compareMongoIds(_id, contact.owner);
+
+  if (!contact || !isValidOwner) {
     throw HttpError(404, "Not Found");
   }
+
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+
   res.json(result);
 };
 
 const updateStatusContact = async (req, res, next) => {
   const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
-  if (!result) {
+  const { _id } = req.user;
+  const contact = await Contact.findById(id);
+  const isValidOwner = compareMongoIds(_id, contact.owner);
+
+  if (!contact || !isValidOwner) {
     throw HttpError(404, "Not Found");
   }
+
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+
   res.json(result);
 };
 
