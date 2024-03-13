@@ -1,7 +1,6 @@
 import HttpError from "../helpers/HttpError.js";
 import contactModel from "../models/contact.js";
 import ctrlWrapper from "../helpers/ctrlWrapper.js";
-import isOwner from "../helpers/compareMongoIds.js";
 import compareMongoIds from "../helpers/compareMongoIds.js";
 
 const { Contact } = contactModel;
