@@ -1,6 +1,7 @@
 import express from "express";
 import authenticate from "../middlewares/authenticate.js";
 import validateBody from "../middlewares/validateBody.js";
+import upload from "../middlewares/upload.js";
 import userModel from "../models/user.js";
 import controls from "../controllers/auth.js";
 
@@ -24,5 +25,7 @@ authRouter.patch(
   validateBody(userModel.subscriptionSchema),
   controls.subscription
 );
+
+authRouter.patch("/avatars", authenticate, upload.single("avatar"), controls.updateAvatar)
 
 export default authRouter;
