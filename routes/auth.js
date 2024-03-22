@@ -13,6 +13,14 @@ authRouter.post(
   controls.register
 );
 
+authRouter.get("/verify/:verificationToken", controls.verifyEmail);
+
+authRouter.post(
+  "/verify",
+  validateBody(userModel.emailSchema),
+  controls.resendVerifyEmail
+);
+
 authRouter.post("/login", validateBody(userModel.loginSchema), controls.login);
 
 authRouter.get("/logout", authenticate, controls.logout);
@@ -26,6 +34,11 @@ authRouter.patch(
   controls.subscription
 );
 
-authRouter.patch("/avatars", authenticate, upload.single("avatar"), controls.updateAvatar)
+authRouter.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  controls.updateAvatar
+);
 
 export default authRouter;
